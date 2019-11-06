@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<script>
+	function submit(id, status) {
+		
+		alert(id);
+		var form = document.getElementById('submit');
+		form.method = status;
+		form.submit();
+		
+		
+        $.ajax({
+            type: status,
+            data: {id: id},
+            url: "/user",
+            success: function (data) {
+                if (data == "认证成功") {
+                    window.location.href = ("/user");
+                } else {
+                    alert("认证失败");
+                }
+            },
+            error: function (data) {
+                alert("认证失败");
+            }
+        });
+	}
+	function displayDate(){
+		document.getElementById("demo").innerHTML=Date();
+	}
+</script>
+</head>
+<body>
+	<form id="input" name="input" th:action="@{/user}" method="post">
+		<input type="hidden" name="_method" value="put" th:if="${user!=null}"/>
+		<input type="hidden" name="id" th:if="${user!=null}" th:value="${user.id}">
+		User：
+		<input type="text" name="name" th:value="${user!=null}?${user.name}:''"><br>
+		Password：
+		<input type="password" name="password" th:value="${user!=null}?${user.password}:''"><br>
+		Gender：
+		<input type="radio" name="gender" value="1" th:check="${user!=null}?${user.gender==1}:false">Male
+		<input type="radio" name="gender" value="0" th:check="${user!=null}?${user.gender==0}:false">Female<br>
+		Email: <input type="text" name="email" th:value="${user!=null}?${user.email}:''"><br>
+		Birthday: <input type="text" name="birthday" th:value="${user!=null}?${user.birthday}:''"><br>
+		<input type="submit" th:value="${user!=null}?'update':'save'">
+		<input type="reset" value="reset"><br>
+	</form>
+	<table>
+		<thead>
+			<tr>
+				<th>id</th>
+				<th>name</th>
+				<th>password</th>
+				<th>gender</th>
+				<th>email</th>
+				<th>birthday</th>
+				<th>action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="user:${users}">
+				<td th:text="${user.id}">id</td>
+				<td th:text="${user.name}">name</td>
+				<td th:text="${user.password}">password</td>
+				<td th:text="${user.gender}">gender</td>
+				<td th:text="${user.email}">email</td>
+				<td th:text="${user.birthday}">birthday</td>
+				<td><a th:href="@{/user/}+${user.id}">update</a>
+					<form th:action="@{/user/}+${user.id}" method="post">
+						<input type="hidden" name="_method" value="delete"/>
+						<button type="submit">delete</button>
+					</form>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+
+</html>
