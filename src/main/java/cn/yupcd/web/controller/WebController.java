@@ -5,9 +5,9 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -16,8 +16,12 @@ import cn.yupcd.web.exception.UserException;
 @Controller
 public class WebController {
 
+	@Value("${aliyun.url}")
+	private String url;
+	
 	@GetMapping("/dashboard")
 	public String index() {
+		System.out.println("aliyun.url=" + url);
 		return "dashboard";
 	}
 	
